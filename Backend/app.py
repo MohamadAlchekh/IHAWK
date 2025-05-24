@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_file
 import os
 import requests
 import base64
+from dotenv import load_dotenv
 import io
 import json
 from PIL import Image, ImageDraw, ImageFont
@@ -10,8 +11,9 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Google Cloud Vision API key
-API_KEY = "AIzaSyBG2FtGOP2uE0qOgd3JLx5-9XnQlyHuNng"  # Your API key
+load_dotenv()
+
+API_KEY = os.getenv("GOOGLE_API_KEY")
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
