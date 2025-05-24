@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
 import os
 import requests
 import base64
@@ -8,11 +9,11 @@ import json
 from PIL import Image, ImageDraw, ImageFont
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for frontend requests
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 load_dotenv()
-
 API_KEY = os.getenv("GOOGLE_API_KEY")
 
 @app.route('/upload', methods=['POST'])
@@ -24,7 +25,6 @@ def upload_image():
     image_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(image_path)
 
-    # Process image with Vision API
     try:
         results, output_image_path = analyze_image(image_path, file.filename)
         return jsonify({
@@ -90,7 +90,7 @@ def analyze_image(image_path, filename):
         confidence = building['score']
         status = "Intact"
         box_color = "green"
-        if has_damage and confidence > 0.6:
+        if has_damage and confidence > 0.5:  # Lowered threshold for more detections
             status = "Collapsed"
             box_color = "red"
         elif has_damage:
@@ -143,6 +143,10 @@ def analyze_image(image_path, filename):
                 "priority": priority,
                 "color": "red" if priority > 2 else "yellow" if priority > 0 else "green"
             })
+
+    # Handle case with no buildings
+    if not buildings:
+        results["message"] = "No buildings detected. Try a clearer image with more structures."
 
     # Save annotated image
     output_image_path = os.path.join(UPLOAD_FOLDER, f"output_{filename}")

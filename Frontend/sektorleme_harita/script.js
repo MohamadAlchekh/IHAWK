@@ -1,4 +1,4 @@
-// Drag & Drop işlemleri
+// Drag & Drop and file input logic
 const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
 const imagePreview = document.getElementById('imagePreview');
@@ -6,8 +6,9 @@ const previewImage = document.getElementById('previewImage');
 const fileName = document.getElementById('fileName');
 const fileSize = document.getElementById('fileSize');
 const uploadDate = document.getElementById('uploadDate');
+const results = document.getElementById('results');
 
-// Drag & Drop olayları
+// Drag & Drop events
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropZone.addEventListener(eventName, preventDefaults, false);
 });
@@ -50,19 +51,14 @@ function handleFileSelect(e) {
 function handleFiles(files) {
     if (files.length > 0) {
         const file = files[0];
-        
-        // Dosya boyutu kontrolü (10MB)
         if (file.size > 10 * 1024 * 1024) {
             alert('Dosya boyutu 10MB\'dan büyük olamaz!');
             return;
         }
-
-        // Dosya tipi kontrolü
         if (!file.type.match('image.*')) {
             alert('Lütfen sadece resim dosyası yükleyin!');
             return;
         }
-
         const reader = new FileReader();
         reader.onload = function(e) {
             previewImage.src = e.target.result;
@@ -70,6 +66,7 @@ function handleFiles(files) {
             fileSize.textContent = formatFileSize(file.size);
             uploadDate.textContent = new Date().toLocaleString();
             imagePreview.style.display = 'block';
+            uploadToBackend(file); // Send to backend
         }
         reader.readAsDataURL(file);
     }
@@ -83,7 +80,36 @@ function formatFileSize(bytes) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Harita kaydetme ve silme işlemleri
+// Backend upload
+function uploadToBackend(file) {
+    const formData = new FormData();
+    formData.append('image', file);
+    results.textContent = 'Analiz ediliyor...';
+
+    fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            results.textContent = `Hata: ${data.error}`;
+            return;
+        }
+
+        // Display results
+        results.innerHTML = `
+            <img src="http://localhost:5000${data.image_url}" alt="Annotated Image" style="max-width:100%;border-radius:10px;margin-top:20px;">
+            <p>${data.results.buildings.length} bina algılandı.</p>
+            ${data.results.message ? `<p>${data.results.message}</p>` : ''}
+        `;
+    })
+    .catch(error => {
+        results.textContent = `Hata: ${error.message}`;
+    });
+}
+
+// Save and delete map
 function saveMap() {
     const maps = JSON.parse(localStorage.getItem('sectorMaps') || '[]');
     const newMap = {
@@ -93,10 +119,8 @@ function saveMap() {
         size: fileSize.textContent,
         uploadDate: uploadDate.textContent
     };
-    
     maps.push(newMap);
     localStorage.setItem('sectorMaps', JSON.stringify(maps));
-    
     alert('Harita başarıyla kaydedildi!');
     loadSavedMaps();
     resetUpload();
@@ -115,20 +139,17 @@ function resetUpload() {
     uploadDate.textContent = '';
     imagePreview.style.display = 'none';
     fileInput.value = '';
+    results.innerHTML = 'Henüz sonuç yok.';
 }
 
-// Kaydedilen haritaları yükleme
 function loadSavedMaps() {
     const mapsGrid = document.getElementById('savedMapsGrid');
     const maps = JSON.parse(localStorage.getItem('sectorMaps') || '[]');
-    
     mapsGrid.innerHTML = '';
-    
     if (maps.length === 0) {
-        mapsGrid.innerHTML = '<div style="text-align: center; grid-column: 1/-1; padding: 20px;">Henüz kaydedilmiş harita bulunmamaktadır.</div>';
+        mapsGrid.innerHTML = '<div style="text-align:center;grid-column:1/-1;padding:20px;">Henüz kaydedilmiş harita bulunmamaktadır.</div>';
         return;
     }
-
     maps.forEach(map => {
         const card = document.createElement('div');
         card.className = 'map-card';
@@ -144,5 +165,4 @@ function loadSavedMaps() {
     });
 }
 
-// Sayfa yüklendiğinde kaydedilen haritaları göster
-document.addEventListener('DOMContentLoaded', loadSavedMaps); 
+document.addEventListener('DOMContentLoaded', loadSavedMaps);
