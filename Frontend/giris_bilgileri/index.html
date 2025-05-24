@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IHAWK - Ekip Kayıt Formu</title>
+    <style>
+        :root {
+            --primary-color: #01007f;
+            --secondary-color: #e2201a;
+            --primary-light: #0200b3;
+            --secondary-light: #ff2a23;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            color: var(--text-color);
+            margin: 0;
+            padding-top: 82px; /* Added padding for top bar */
+        }
+
+        /* Top bar positioning */
+        .top-red-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            width: 100%;
+            height: 22px;
+            background: #b00203;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .flag-img {
+            height: 22px;
+            width: auto;
+            margin-right: 32px;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 22px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .logo {
+            height: 50px;
+        }
+
+        nav {
+            flex: 2;
+            display: flex;
+            gap: 10rem;
+            align-items: center;
+            justify-content: flex-end;
+            height: 50px;
+        }
+
+        nav a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #b00203;
+            transition: color 0.3s;
+        }
+
+        .volunteer-btn {
+            background-color: #b00203;
+            color: #f7f7f7;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .volunteer-btn:hover {
+            background-color: #8a0102;
+            color: #ffffff;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-section h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1em;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(1, 0, 127, 0.1);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: var(--primary-light);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(45deg, var(--primary-light), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(1, 0, 127, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .add-btn {
+            background: linear-gradient(45deg, var(--secondary-color), var(--secondary-light));
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(226, 32, 26, 0.2);
+        }
+
+        .remove-btn {
+            background: var(--secondary-color);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: var(--secondary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(226, 32, 26, 0.2);
+        }
+
+        .member-group, .equipment-group {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .member-group:hover, .equipment-group:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .form-row label {
+            margin-bottom: 0;
+            min-width: 120px;
+            flex-shrink: 0;
+        }
+
+        .form-row input, .form-row select {
+            flex: 1;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--secondary-color);
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        select[multiple] {
+            height: 120px;
+        }
+
+        select[multiple] option {
+            padding: 8px;
+        }
+
+        select[multiple] option:checked {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-row label {
+                margin-bottom: 5px;
+            }
+
+            .form-section {
+                padding: 15px;
+            }
+        }
+
+        /* Özel animasyonlar */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Özel scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        /* Bildirim Sistemi Stilleri */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+        }
+
+        .notification {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transform: translateX(120%);
+            animation: slideIn 0.5s forwards;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .notification.error {
+            border-left-color: var(--secondary-color);
+        }
+
+        .notification-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+
+        .notification.success .notification-icon {
+            color: var(--success-color);
+        }
+
+        .notification.error .notification-icon {
+            color: var(--secondary-color);
+        }
+
+        .notification-content {
+            flex-grow: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        .notification-message {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        @keyframes slideIn {
+            to { transform: translateX(0); }
+        }
+
+        @keyframes slideOut {
+            to { transform: translateX(120%); }
+        }
+
+        /* Başarılı Kayıt Modal Stilleri */
+        .success-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            animation: modalFadeIn 0.5s ease-out;
+        }
+
+        .success-modal i {
+            font-size: 60px;
+            color: var(--success-color);
+            margin-bottom: 20px;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .success-modal h2 {
+            color: var(--success-color);
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .success-modal p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        .success-modal .btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .success-modal .btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            display: none;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Kırmızı Şerit -->
+    <div class="top-red-bar">
+        <img src="../Anasayfa/img/bayrak.png" alt="Bayrak" class="flag-img">
+    </div>
+    <!-- Kırmızı Şerit ve Navbar -->
+    <div class="top-bar">
+        <a href="../Anasayfa/index.html">
+            <img src="../Anasayfa/img/logo.png" alt="Logo" class="logo">
+        </a>
+        <nav>
+            <a href="../Anasayfa/index.html">ANASAYFA</a>
+            <a href="../Hakkımızda/about.html">HAKKIMIZDA</a>
+            <a href="../sektorleme_harita/index.html">SEKTÖRLEME HARİTASI</a>
+            <a href="../ekipler/index.html">EKİPLER</a>
+            <a href="../giris_bilgileri/index.html"><button class="volunteer-btn">KAYIT OL</button></a>
+        </nav>
+    </div>
+
+    <!-- Bildirim Konteyneri -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Başarılı Kayıt Modal -->
+    <div class="modal-overlay" id="successModalOverlay"></div>
+    <div class="success-modal" id="successModal">
+        <i class="fas fa-check-circle"></i>
+        <h2>Kayıt Başarılı!</h2>
+        <p>Ekip bilgileri başarıyla kaydedildi.</p>
+        <button class="btn" onclick="redirectToDashboard()">Ekip Paneline Git</button>
+    </div>
+
+    <div class="container">
+        <h1>IHAWK - Ekip Kayıt Formu</h1>
+        
+        <form action="#" method="POST" onsubmit="return handleFormSubmit(event)">
+            <!-- Ekip Bilgileri -->
+            <div class="form-section">
+                <h2>Ekip Bilgileri</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="organization" class="required">Bağlı Olduğu Kurum</label>
+                        <select id="organization" name="organization" required>
+                            <option value="">Kurum Seçiniz</option>
+                            <option value="afad">AFAD</option>
+                            <option value="ihh">İHH İnsani Yardım Vakfı</option>
+                            <option value="akut">AKUT</option>
+                            <option value="kizilay">Türk Kızılay</option>
+                            <option value="umke">UMKE</option>
+                            <option value="diger">Diğer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="teamName" class="required">Ekip Adı</label>
+                        <input type="text" id="teamName" name="teamName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="required">E-posta</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="required">Telefon</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="teamType" class="required">Ekip Türü</label>
+                        <select id="teamType" name="teamType" required>
+                            <option value="">Seçiniz</option>
+                            <option value="profesyonel">Profesyonel Ekip</option>
+                            <option value="gönüllü">Gönüllü Ekip</option>
+                            <option value="karma">Karma Ekip</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="teamStatus" class="required">Ekip Durumu</label>
+                        <select id="teamStatus" name="teamStatus" required>
+                            <option value="aktif">Aktif</option>
+                            <option value="pasif">Pasif</option>
+                            <option value="tatil">Tatil</option>
+                            <option value="egitim">Eğitimde</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ekip Üyeleri -->
+            <div class="form-section">
+                <h2>Ekip Üyeleri</h2>
+                <div id="membersContainer">
+                    <!-- İlk üye grubu -->
+                    <div class="member-group">
+                        <div class="form-row">
+                            <label for="member1Name" class="required">İsim</label>
+                            <input type="text" id="member1Name" name="memberName[]" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="member1Role" class="required">Görev</label>
+                            <input type="text" id="member1Role" name="memberRole[]" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="member1Phone">Telefon</label>
+                            <input type="tel" id="member1Phone" name="memberPhone[]">
+                        </div>
+                        <div class="form-row">
+                            <label for="member1Experience">Tecrübe (Yıl)</label>
+                            <input type="number" id="member1Experience" name="memberExperience[]" min="0">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="add-btn" onclick="addMember()">+ Yeni Üye Ekle</button>
+            </div>
+
+            <!-- Ekipman Bilgileri -->
+            <div class="form-section">
+                <h2>Ekipman Bilgileri</h2>
+                <div id="equipmentContainer">
+                    <!-- İlk ekipman grubu -->
+                    <div class="equipment-group">
+                        <div class="form-row">
+                            <label for="equipment1Name" class="required">Ekipman Adı</label>
+                            <input type="text" id="equipment1Name" name="equipmentName[]" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="equipment1Type" class="required">Ekipman Türü</label>
+                            <select id="equipment1Type" name="equipmentType[]" required>
+                                <option value="">Seçiniz</option>
+                                <option value="drone">Drone</option>
+                                <option value="kamera">Kamera</option>
+                                <option value="haberleşme">Haberleşme Ekipmanı</option>
+                                <option value="arama">Arama Ekipmanı</option>
+                                <option value="kurtarma">Kurtarma Ekipmanı</option>
+                                <option value="diğer">Diğer</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label for="equipment1Quantity" class="required">Miktar</label>
+                            <input type="number" id="equipment1Quantity" name="equipmentQuantity[]" min="1" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="equipment1Status">Durum</label>
+                            <select id="equipment1Status" name="equipmentStatus[]">
+                                <option value="aktif">Aktif</option>
+                                <option value="bakımda">Bakımda</option>
+                                <option value="yedek">Yedek</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="add-btn" onclick="addEquipment()">+ Yeni Ekipman Ekle</button>
+            </div>
+
+            <!-- Operasyon Tecrübesi -->
+            <div class="form-section">
+                <h2>Operasyon Tecrübesi</h2>
+                <div class="form-group">
+                    <label for="experience" class="required">Toplam Tecrübe (Yıl)</label>
+                    <input type="number" id="experience" name="experience" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="operationCount" class="required">Katılım Sağlanan Operasyon Sayısı</label>
+                    <input type="number" id="operationCount" name="operationCount" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="previousOperations">Önemli Operasyonlar</label>
+                    <textarea id="previousOperations" name="previousOperations" rows="3" 
+                        placeholder="Katıldığınız önemli operasyonları kısaca açıklayın"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="specializations">Uzmanlık Alanları</label>
+                    <textarea id="specializations" name="specializations" rows="2" 
+                        placeholder="Ekip olarak uzman olduğunuz alanları belirtin"></textarea>
+                </div>
+            </div>
+
+            <!-- Lokasyon ve Görev Bölgesi -->
+            <div class="form-section">
+                <h2>Lokasyon ve Görev Bölgesi</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="city" class="required">İl</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="district" class="required">İlçe</label>
+                        <input type="text" id="district" name="district" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="coordinates">Koordinatlar</label>
+                        <input type="text" id="coordinates" name="coordinates" 
+                            placeholder="Örn: 41.0082, 28.9784">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Detaylı Adres</label>
+                        <input type="text" id="address" name="address">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label for="preferredRegions" class="required">Görev Almak İstenen Bölgeler</label>
+                        <select id="preferredRegions" name="preferredRegions[]" multiple required>
+                            <option value="marmara">Marmara Bölgesi</option>
+                            <option value="ege">Ege Bölgesi</option>
+                            <option value="ic_anadolu">İç Anadolu Bölgesi</option>
+                            <option value="karadeniz">Karadeniz Bölgesi</option>
+                            <option value="akdeniz">Akdeniz Bölgesi</option>
+                            <option value="dogu_anadolu">Doğu Anadolu Bölgesi</option>
+                            <option value="guneydogu_anadolu">Güneydoğu Anadolu Bölgesi</option>
+                        </select>
+                        <small class="help-text">Birden fazla bölge seçmek için CTRL tuşuna basılı tutarak seçim yapın</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acil Durum İletişim -->
+            <div class="form-section">
+                <h2>Acil Durum İletişim Bilgileri</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="emergencyContact" class="required">Acil Durum İletişim Kişisi</label>
+                        <input type="text" id="emergencyContact" name="emergencyContact" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emergencyPhone" class="required">Acil Durum Telefonu</label>
+                        <input type="tel" id="emergencyPhone" name="emergencyPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emergencyEmail">Acil Durum E-posta</label>
+                        <input type="email" id="emergencyEmail" name="emergencyEmail">
+                    </div>
+                    <div class="form-group">
+                        <label for="emergencyRelation">İlişki</label>
+                        <input type="text" id="emergencyRelation" name="emergencyRelation" 
+                            placeholder="Örn: Ekip Lideri, Yönetici">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Formu Gönder</button>
+        </form>
+    </div>
+
+    <script>
+        function addMember() {
+            const container = document.getElementById('membersContainer');
+            const memberCount = container.children.length + 1;
+            
+            const memberGroup = document.createElement('div');
+            memberGroup.className = 'member-group';
+            memberGroup.innerHTML = `
+                <div class="form-row">
+                    <label for="member${memberCount}Name" class="required">İsim</label>
+                    <input type="text" id="member${memberCount}Name" name="memberName[]" required>
+                </div>
+                <div class="form-row">
+                    <label for="member${memberCount}Role" class="required">Görev</label>
+                    <input type="text" id="member${memberCount}Role" name="memberRole[]" required>
+                </div>
+                <div class="form-row">
+                    <label for="member${memberCount}Phone">Telefon</label>
+                    <input type="tel" id="member${memberCount}Phone" name="memberPhone[]">
+                </div>
+                <div class="form-row">
+                    <label for="member${memberCount}Experience">Tecrübe (Yıl)</label>
+                    <input type="number" id="member${memberCount}Experience" name="memberExperience[]" min="0">
+                </div>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Üyeyi Sil</button>
+            `;
+            
+            container.appendChild(memberGroup);
+        }
+
+        function addEquipment() {
+            const container = document.getElementById('equipmentContainer');
+            const equipmentCount = container.children.length + 1;
+            
+            const equipmentGroup = document.createElement('div');
+            equipmentGroup.className = 'equipment-group';
+            equipmentGroup.innerHTML = `
+                <div class="form-row">
+                    <label for="equipment${equipmentCount}Name" class="required">Ekipman Adı</label>
+                    <input type="text" id="equipment${equipmentCount}Name" name="equipmentName[]" required>
+                </div>
+                <div class="form-row">
+                    <label for="equipment${equipmentCount}Type" class="required">Ekipman Türü</label>
+                    <select id="equipment${equipmentCount}Type" name="equipmentType[]" required>
+                        <option value="">Seçiniz</option>
+                        <option value="drone">Drone</option>
+                        <option value="kamera">Kamera</option>
+                        <option value="haberleşme">Haberleşme Ekipmanı</option>
+                        <option value="arama">Arama Ekipmanı</option>
+                        <option value="kurtarma">Kurtarma Ekipmanı</option>
+                        <option value="diğer">Diğer</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="equipment${equipmentCount}Quantity" class="required">Miktar</label>
+                    <input type="number" id="equipment${equipmentCount}Quantity" name="equipmentQuantity[]" min="1" required>
+                </div>
+                <div class="form-row">
+                    <label for="equipment${equipmentCount}Status">Durum</label>
+                    <select id="equipment${equipmentCount}Status" name="equipmentStatus[]">
+                        <option value="aktif">Aktif</option>
+                        <option value="bakımda">Bakımda</option>
+                        <option value="yedek">Yedek</option>
+                    </select>
+                </div>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Ekipmanı Sil</button>
+            `;
+            
+            container.appendChild(equipmentGroup);
+        }
+
+        // Bildirim sistemi
+        function showNotification(title, message, type = 'success') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            
+            notification.innerHTML = `
+                <i class="fas fa-${icon} notification-icon"></i>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s forwards';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        function showSuccessModal() {
+            document.getElementById('successModalOverlay').style.display = 'block';
+            document.getElementById('successModal').style.display = 'block';
+        }
+
+        function redirectToDashboard() {
+            window.location.href = '../ekipler/index.html';
+        }
+
+        // Form gönderim işlemini güncelle
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            // Form verilerini topla
+            const formData = new FormData(event.target);
+            const teamData = {
+                id: Date.now(),
+                organization: formData.get('organization'),
+                teamName: formData.get('teamName'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                teamType: formData.get('teamType'),
+                teamStatus: formData.get('teamStatus'),
+                members: [],
+                equipment: [],
+                location: {
+                    city: formData.get('city'),
+                    district: formData.get('district'),
+                    address: formData.get('address'),
+                    coordinates: formData.get('coordinates')
+                }
+            };
+
+            // Üye bilgilerini topla
+            const memberGroups = document.querySelectorAll('.member-group');
+            memberGroups.forEach(group => {
+                const member = {
+                    name: group.querySelector('[name^="memberName"]').value,
+                    role: group.querySelector('[name^="memberRole"]').value,
+                    phone: group.querySelector('[name^="memberPhone"]').value,
+                    experience: group.querySelector('[name^="memberExperience"]').value
+                };
+                teamData.members.push(member);
+            });
+
+            // Ekipman bilgilerini topla
+            const equipmentGroups = document.querySelectorAll('.equipment-group');
+            equipmentGroups.forEach(group => {
+                const equipment = {
+                    name: group.querySelector('[name^="equipmentName"]').value,
+                    type: group.querySelector('[name^="equipmentType"]').value,
+                    quantity: group.querySelector('[name^="equipmentQuantity"]').value,
+                    status: group.querySelector('[name^="equipmentStatus"]').value
+                };
+                teamData.equipment.push(equipment);
+            });
+
+            // Mevcut ekipleri al ve yeni ekibi ekle
+            const teams = JSON.parse(localStorage.getItem('teams') || '[]');
+            teams.push(teamData);
+            localStorage.setItem('teams', JSON.stringify(teams));
+
+            // Başarılı kayıt modalını göster
+            showSuccessModal();
+            
+            // 3 saniye sonra otomatik yönlendirme
+            setTimeout(redirectToDashboard, 3000);
+        }
+
+        // Form submit olayını dinle
+        document.getElementById('registrationForm').addEventListener('submit', handleFormSubmit);
+    </script>
+</body>
+</html> 

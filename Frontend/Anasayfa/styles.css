@@ -1,0 +1,245 @@
+/* Genel Stiller */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 150vh; 
+}
+body, html {
+    overflow: auto; /* veya overflow-y: auto; */
+}
+
+/* Üst Bar ve Navbar */
+.top-bar {
+    background-color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    height: 60px;
+    background-color: #fff;
+}
+
+.logo-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.logo {
+    height: 50px;
+}
+
+nav {
+    flex: 2;
+    display: flex;
+    gap: 10rem;
+    align-items: center;
+    justify-content: flex-end;
+    height: 50px;
+}
+
+nav a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #b00203;
+    transition: color 0.3s;
+}
+
+.volunteer-btn {
+    background-color: #b00203;
+    color: #f7f7f7;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.volunteer-btn:hover {
+    background-color: #8a0102; /* Daha koyu kırmızı */
+    color: #ffffff; /* Bir ton daha parlak beyaz */
+}
+/* Ana Banner */
+.main-banner {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 500px;
+    overflow: hidden;
+}
+
+.banner-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 1;
+    position: relative;
+}
+
+.banner-text {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 3;
+    max-width: 700px;
+    width: 90%;
+    color: #fff;
+    background: rgba(0,0,0,0.25);
+    padding: 32px 24px;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.banner-text h1, .banner-text p {
+    color: #fff;
+}
+
+.banner-text p {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.donate-btn, .details-btn {
+    padding: 1rem 2rem;
+    margin-right: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+.donate-btn {
+    background-color: #b00203;
+    color: rgb(255, 255, 255);
+    transition: background-color 0.3s ease;
+}
+
+.donate-btn:hover {
+    background-color: #8a0102; 
+}
+
+.details-btn {
+    background-color: #ffffff77;
+    color: rgb(0, 0, 0);
+    transition: background-color 0.3s ease;
+}
+
+.details-btn:hover {
+    background-color: #fcfbfbbe; 
+}
+
+.banner-img-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.banner-img-wrapper::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0; right: 0;
+    background: rgba(255, 255, 255, 0.2); /* Her yerde eşit beyazlık */
+    z-index: 2;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 1;
+    position: relative;
+}
+
+/* Kırmızı Şerit */
+.top-red-bar {
+    width: 100%;
+    height: 22px;
+    background: #b00203;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+.flag-img {
+    height: 22px;
+    width: auto;
+    margin-right: 32px;
+}
+
+.footer {
+    background-color: #191940; /* Kalın koyu mavi */
+    color: white;
+    padding: 2rem;
+    margin-top: 20rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #ffffff44;
+    padding-bottom: 1rem;
+}
+
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #ccc; /* Hover'da biraz açılır */
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #ddd;
+}
+
+@media (max-width: 768px) {
+    .banner-text {
+        top: 4%;
+        padding: 16px 8px;
+        font-size: 1rem;
+    }
+    .main-banner {
+        min-height: 300px;
+    }
+    .banner-video {
+        min-height: 300px;
+    }
+}

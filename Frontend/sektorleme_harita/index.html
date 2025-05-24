@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IHAWK - Sektörleme Haritası</title>
+    <link rel="stylesheet" href="../Anasayfa/styles.css">
+    <style>
+        :root {
+            --primary-color: #181818;
+            --secondary-color: #e2201a;
+            --primary-light: #0200b3;
+            --secondary-light: #ff2a23;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            color: var(--text-color);
+            margin: 0;
+            padding-top: 82px; /* Changed from margin-top to padding-top */
+        }
+
+        /* Top bar positioning */
+        .top-red-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 22px; /* Height of the red bar */
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #fff;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2em;
+            margin: 0;
+        }
+
+        .upload-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: rgba(1, 0, 127, 0.02);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(1, 0, 127, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .upload-hint {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(1, 0, 127, 0.2);
+        }
+
+        .image-preview {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .image-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .image-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .delete-btn {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .saved-maps {
+            margin-top: 40px;
+        }
+
+        .saved-maps h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .maps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .map-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .map-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .map-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .map-info {
+            padding: 15px;
+        }
+
+        .map-info h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .map-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .upload-area {
+                padding: 20px;
+            }
+
+            .image-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Kırmızı Şerit -->
+    <div class="top-red-bar">
+        <img src="../Anasayfa/img/bayrak.png" alt="Bayrak" class="flag-img">
+    </div>
+    <!-- Kırmızı Şerit ve Navbar -->
+    <div class="top-bar">
+        <a href="../Anasayfa/index.html">
+            <img src="../Anasayfa/img/logo.png" alt="Logo" class="logo">
+        </a>
+        <nav>
+            <a href="../Anasayfa/index.html">ANASAYFA</a>
+            <a href="../Hakkımızda/about.html">HAKKIMIZDA</a>
+            <a href="../sektorleme_harita/index.html">SEKTÖRLEME HARİTASI</a>
+            <a href="../ekipler/index.html">EKİPLER</a>
+            <a href="../giris_bilgileri/index.html"><button class="volunteer-btn">KAYIT OL</button></a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>IHAWK - Sektörleme Haritası</h1>
+            <a href="../ekipler/index.html" style="text-decoration: none; padding: 10px 20px; border-radius: 6px; background: var(--primary-color); color: white;">Ekipler Sayfasına Dön</a>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-area" id="dropZone">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <div class="upload-text">Harita Görselini Yüklemek İçin Tıklayın veya Sürükleyin</div>
+                <div class="upload-hint">PNG, JPG veya JPEG formatında, maksimum 10MB</div>
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Dosya Seç</button>
+
+            <div class="image-preview" id="imagePreview">
+                <img id="previewImage" src="" alt="Harita Önizleme">
+                <div class="image-info">
+                    <p>Dosya Adı: <span id="fileName"></span></p>
+                    <p>Boyut: <span id="fileSize"></span></p>
+                    <p>Yüklenme Tarihi: <span id="uploadDate"></span></p>
+                </div>
+                <div class="image-actions">
+                    <button class="action-btn save-btn" onclick="saveMap()">Haritayı Kaydet</button>
+                    <button class="action-btn delete-btn" onclick="deleteMap()">Haritayı Sil</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="saved-maps">
+            <h2>Kaydedilen Haritalar</h2>
+            <div class="maps-grid" id="savedMapsGrid">
+                <!-- Kaydedilen haritalar buraya dinamik olarak eklenecek -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Drag & Drop işlemleri
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImage = document.getElementById('previewImage');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const uploadDate = document.getElementById('uploadDate');
+
+        // Drag & Drop olayları
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.classList.add('dragover');
+        }
+
+        function unhighlight(e) {
+            dropZone.classList.remove('dragover');
+        }
+
+        dropZone.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', handleFileSelect, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                
+                // Dosya boyutu kontrolü (10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('Dosya boyutu 10MB\'dan büyük olamaz!');
+                    return;
+                }
+
+                // Dosya tipi kontrolü
+                if (!file.type.match('image.*')) {
+                    alert('Lütfen sadece resim dosyası yükleyin!');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+                    uploadDate.textContent = new Date().toLocaleString();
+                    imagePreview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Harita kaydetme ve silme işlemleri
+        function saveMap() {
+            const maps = JSON.parse(localStorage.getItem('sectorMaps') || '[]');
+            const newMap = {
+                id: Date.now(),
+                image: previewImage.src,
+                name: fileName.textContent,
+                size: fileSize.textContent,
+                uploadDate: uploadDate.textContent
+            };
+            
+            maps.push(newMap);
+            localStorage.setItem('sectorMaps', JSON.stringify(maps));
+            
+            alert('Harita başarıyla kaydedildi!');
+            loadSavedMaps();
+            resetUpload();
+        }
+
+        function deleteMap() {
+            if (confirm('Haritayı silmek istediğinizden emin misiniz?')) {
+                resetUpload();
+            }
+        }
+
+        function resetUpload() {
+            previewImage.src = '';
+            fileName.textContent = '';
+            fileSize.textContent = '';
+            uploadDate.textContent = '';
+            imagePreview.style.display = 'none';
+            fileInput.value = '';
+        }
+
+        // Kaydedilen haritaları yükleme
+        function loadSavedMaps() {
+            const mapsGrid = document.getElementById('savedMapsGrid');
+            const maps = JSON.parse(localStorage.getItem('sectorMaps') || '[]');
+            
+            mapsGrid.innerHTML = '';
+            
+            if (maps.length === 0) {
+                mapsGrid.innerHTML = '<div style="text-align: center; grid-column: 1/-1; padding: 20px;">Henüz kaydedilmiş harita bulunmamaktadır.</div>';
+                return;
+            }
+
+            maps.forEach(map => {
+                const card = document.createElement('div');
+                card.className = 'map-card';
+                card.innerHTML = `
+                    <img src="${map.image}" alt="${map.name}">
+                    <div class="map-info">
+                        <h3>${map.name}</h3>
+                        <p class="map-date">Yüklenme: ${map.uploadDate}</p>
+                        <p>Boyut: ${map.size}</p>
+                    </div>
+                `;
+                mapsGrid.appendChild(card);
+            });
+        }
+
+        // Sayfa yüklendiğinde kaydedilen haritaları göster
+        document.addEventListener('DOMContentLoaded', loadSavedMaps);
+    </script>
+</body>
+</html> 
