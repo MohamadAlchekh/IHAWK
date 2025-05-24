@@ -114,16 +114,18 @@
             flex-direction: column;
             height: 100%;
             position: relative;
+            border: 1px solid var(--border-color);
         }
 
         .team-card.busy {
-            background: linear-gradient(to bottom, #fff5f5, #fff);
+            background: linear-gradient(to bottom, #fff0f0, #fff);
             border: 2px solid var(--secondary-color);
+            box-shadow: 0 4px 20px rgba(var(--secondary-color-rgb, 226, 32, 26), 0.2);
         }
 
         .team-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
         }
 
         .team-header {
@@ -138,24 +140,27 @@
             position: absolute;
             top: 15px;
             right: 15px;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: white;
         }
 
         .status-active {
             background: var(--success-color);
+            box-shadow: 0 2px 5px rgba(var(--success-color-rgb, 40, 167, 69), 0.3);
         }
 
         .status-busy {
             background: var(--secondary-color);
-            color: white;
-            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(var(--secondary-color-rgb, 226, 32, 26), 0.3);
         }
 
         .status-inactive {
-            background: var(--danger-color);
+            background: #6c757d;
+            color: white;
         }
 
         .status-training {
@@ -242,9 +247,9 @@
 
         .organization-badge {
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
             font-weight: 600;
             margin-top: 5px;
         }
@@ -400,23 +405,26 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
+            background: rgba(0, 0, 0, 0.6); /* Slightly darker overlay */
+            display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(4px); /* Slightly less blur */
         }
 
         .modal {
             background: white;
             border-radius: 15px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
+            width: 95%; /* Increased width on smaller screens */
+            max-width: 500px; /* Reduced max-width for task modal focus */
+            max-height: 95vh; /* Increased max-height */
             overflow-y: auto;
             position: relative;
             animation: modalFadeIn 0.3s ease-out;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+             display: flex; /* Use flex to structure modal content */
+             flex-direction: column;
         }
 
         @keyframes modalFadeIn {
@@ -427,25 +435,26 @@
         .modal-header {
             background: var(--primary-color);
             color: white;
-            padding: 20px;
+            padding: 18px 20px; /* Adjusted padding */
             border-radius: 15px 15px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
         .modal-header h2 {
             margin: 0;
-            font-size: 1.5em;
+            font-size: 1.4em; /* Slightly smaller font */
         }
 
         .modal-close {
             background: none;
             border: none;
             color: white;
-            font-size: 24px;
+            font-size: 28px; /* Larger close button */
             cursor: pointer;
-            padding: 5px;
+            padding: 0;
             transition: transform 0.3s;
         }
 
@@ -454,106 +463,71 @@
         }
 
         .modal-body {
-            padding: 20px;
+            padding: 20px; /* Consistent padding */
+            flex-grow: 1; /* Allow body to grow */
         }
 
-        .detail-section {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-        }
-
-        .detail-section h3 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
+        .modal-footer {
+            padding: 15px 20px; /* Consistent padding */
+            border-top: 1px solid #eee; /* Subtle separator */
             display: flex;
-            align-items: center;
+            justify-content: flex-end; /* Align buttons to the right */
             gap: 10px;
+            flex-shrink: 0; /* Prevent shrinking */
         }
 
-        .detail-section h3 i {
-            font-size: 1.2em;
-        }
-
-        .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .detail-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .detail-item h4 {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-
-        .detail-item p {
-            color: var(--text-color);
-            font-weight: 500;
-            margin: 0;
-        }
-
-        .member-list, .equipment-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .member-card, .equipment-card {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .member-card h4, .equipment-card h4 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .member-card p, .equipment-card p {
-            color: #666;
-            font-size: 0.9em;
-            margin: 5px 0;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
+        .modal-footer .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
             font-weight: 600;
-            margin-top: 10px;
+            transition: background-color 0.3s ease;
         }
 
-        .status-badge.active {
-            background: #e8f5e9;
-            color: #2e7d32;
+        .modal-footer .btn-primary {
+            background: var(--primary-color);
+            color: white;
         }
 
-        .status-badge.busy {
-            background: #ffebee;
-            color: #c62828;
+        .modal-footer .btn-primary:hover {
+            background: var(--primary-light);
         }
 
-        .status-badge.inactive {
-            background: #f5f5f5;
-            color: #616161;
+        .modal-footer .btn-secondary {
+            background: #6c757d; /* Gray background */
+            color: white;
         }
 
-        .status-badge.training {
-            background: #e3f2fd;
-            color: #1565c0;
+        .modal-footer .btn-secondary:hover {
+            background: #5a6268; /* Darker gray */
+        }
+
+        /* Form group for modal body */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1em;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb, 1, 0, 127), 0.25);
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -589,6 +563,27 @@
             </div>
             <div class="modal-body" id="modalContent">
                 <!-- Modal içeriği dinamik olarak doldurulacak -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Görev Atama/Güncelleme Modal -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="taskModalTitle">Görev Ata</h2>
+                <button class="modal-close" onclick="closeTaskModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="buildingInput">Görev Yeri (Bina Adı):</label>
+                    <input type="text" id="buildingInput" class="form-control" placeholder="Bina adını girin">
+                </div>
+                <input type="hidden" id="taskIdInput">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveTaskBtn">Kaydet</button>
+                <button class="btn btn-secondary" onclick="closeTaskModal()">İptal</button>
             </div>
         </div>
     </div>
@@ -714,7 +709,11 @@
 
     <script>
         // Sayfa yüklendiğinde ekipleri yükle
-        document.addEventListener('DOMContentLoaded', loadTeams);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTeams();
+            // Add event listener for the save button after DOM is loaded
+            document.getElementById('saveTaskBtn').addEventListener('click', saveTask);
+        });
 
         function loadTeams() {
             const teamsGrid = document.querySelector('.teams-grid');
@@ -783,8 +782,8 @@
                 <div class="team-actions">
                     <button class="btn-primary" onclick="showTeamDetails('${team.id}')">Detaylar</button>
                     ${team.teamStatus === 'busy' ? 
-                        `<button class="btn-secondary" onclick="updateTask('${team.id}')">Görev Güncelle</button>` :
-                        `<button class="btn-secondary" onclick="assignTask('${team.id}')">Görev Ata</button>`
+                        `<button class="btn-secondary" onclick="openTaskModal('${team.id}', 'update')">Görev Güncelle</button>` :
+                        `<button class="btn-secondary" onclick="openTaskModal('${team.id}', 'assign')">Görev Ata</button>`
                     }
                 </div>
             `;
@@ -941,53 +940,63 @@
             return statusMap[status] || status;
         }
 
-        // Mevcut fonksiyonları güncelle
-        function assignTask(teamId) {
-            const teams = JSON.parse(localStorage.getItem('teams') || '[]');
-            const teamIndex = teams.findIndex(t => t.id === parseInt(teamId));
-            
-            if (teamIndex !== -1) {
-                const building = prompt('Görev yapılacak bina adını girin:');
-                if (building) {
-                    teams[teamIndex].currentTask = {
-                        building: building,
-                        assignedAt: new Date().toISOString()
-                    };
-                    teams[teamIndex].teamStatus = 'busy';
-                    
-                    localStorage.setItem('teams', JSON.stringify(teams));
-                    loadTeams();
-                    showNotification(
-                        'Görev Atandı',
-                        `${teams[teamIndex].teamName} ekibine "${building}" görevi başarıyla atandı.`,
-                        'success'
-                    );
+        // ----- Task Modal Functions -----
+        const taskModal = document.getElementById('taskModal');
+        const taskModalTitle = document.getElementById('taskModalTitle');
+        const buildingInput = document.getElementById('buildingInput');
+        const taskIdInput = document.getElementById('taskIdInput');
+
+        function openTaskModal(teamId, mode) {
+            taskIdInput.value = teamId;
+            if (mode === 'assign') {
+                taskModalTitle.textContent = 'Görev Ata';
+                buildingInput.value = ''; // Clear input for assignment
+            } else if (mode === 'update') {
+                taskModalTitle.textContent = 'Görev Güncelle';
+                // Find the team and pre-fill the building input
+                const teams = JSON.parse(localStorage.getItem('teams') || '[]');
+                const team = teams.find(t => t.id === parseInt(teamId));
+                if (team && team.currentTask) {
+                    buildingInput.value = team.currentTask.building;
                 }
             }
+            taskModal.style.display = 'flex';
         }
 
-        function updateTask(teamId) {
+        function closeTaskModal() {
+            taskModal.style.display = 'none';
+        }
+
+        function saveTask() {
+            const teamId = parseInt(taskIdInput.value);
+            const building = buildingInput.value.trim();
             const teams = JSON.parse(localStorage.getItem('teams') || '[]');
-            const teamIndex = teams.findIndex(t => t.id === parseInt(teamId));
-            
-            if (teamIndex !== -1) {
-                const currentBuilding = teams[teamIndex].currentTask.building;
-                const newBuilding = prompt('Yeni bina adını girin:', currentBuilding);
-                
-                if (newBuilding && newBuilding !== currentBuilding) {
-                    teams[teamIndex].currentTask = {
-                        building: newBuilding,
-                        assignedAt: new Date().toISOString()
-                    };
-                    
-                    localStorage.setItem('teams', JSON.stringify(teams));
-                    loadTeams();
-                    showNotification(
-                        'Görev Güncellendi',
-                        `${teams[teamIndex].teamName} ekibinin görevi "${newBuilding}" olarak güncellendi.`,
-                        'success'
-                    );
+            const teamIndex = teams.findIndex(t => t.id === teamId);
+
+            if (teamIndex !== -1 && building) {
+                teams[teamIndex].currentTask = {
+                    building: building,
+                    assignedAt: new Date().toISOString()
+                };
+                 // Determine status based on action/current status, default to 'busy'
+                if (taskModalTitle.textContent === 'Görev Ata') {
+                     teams[teamIndex].teamStatus = 'busy';
+                } else if (taskModalTitle.textContent === 'Görev Güncelle' && teams[teamIndex].teamStatus !== 'busy') {
+                     // If updating and status wasn't busy, assume it becomes busy
+                     teams[teamIndex].teamStatus = 'busy';
                 }
+                // If it was already busy and updating, keep it busy
+
+                localStorage.setItem('teams', JSON.stringify(teams));
+                loadTeams();
+                showNotification(
+                    taskModalTitle.textContent === 'Görev Ata' ? 'Görev Atandı' : 'Görev Güncellendi',
+                    `${teams[teamIndex].teamName} ekibine/ekibinin görevi "${building}" başarıyla ${taskModalTitle.textContent === 'Görev Ata' ? 'atandı' : 'güncellendi'}.`,
+                    'success'
+                );
+                closeTaskModal();
+            } else if (!building) {
+                 showNotification('Hata', 'Lütfen görev yapılacak bina adını girin.', 'error');
             }
         }
 
@@ -998,10 +1007,18 @@
             }
         });
 
+        // Close task modal when clicking outside
+        document.getElementById('taskModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTaskModal();
+            }
+        });
+
         // ESC tuşu ile modal kapatma
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                closeModal();
+                closeModal(); // Keep for detail modal
+                closeTaskModal(); // Add for task modal
             }
         });
 
@@ -1041,4 +1058,5 @@
         }
     </script>
 </body>
+</html> 
 </html> 
