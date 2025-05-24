@@ -52,6 +52,11 @@ nav a {
     font-weight: bold;
 }
 
+nav a:hover {
+    color: #b00203;
+    transition: color 0.3s;
+}
+
 .volunteer-btn {
     background-color: #b00203;
     color: #f7f7f7;
@@ -129,13 +134,13 @@ nav a {
 }
 
 .details-btn {
-    background-color: #ffffff52;
+    background-color: #ffffff77;
     color: rgb(0, 0, 0);
     transition: background-color 0.3s ease;
 }
 
 .details-btn:hover {
-    background-color: #fcfbfb85; 
+    background-color: #fcfbfbbe; 
 }
 
 .banner-img-wrapper {

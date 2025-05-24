@@ -79,6 +79,11 @@ nav a {
     font-weight: bold;
 }
 
+nav a:hover {
+    color: #b00203;
+    transition: color 0.3s;
+}
+
 .volunteer-btn {
     background-color: #b00203;
     color: #f7f7f7;
@@ -99,8 +104,8 @@ nav a {
 .about-content {
     flex: 1;
     max-width: 1000px;
-    margin: 50px auto;
-    padding: 40px;
+    margin: 30px auto 40px auto;
+    padding: 40px 40px 20px 40px;
     background: white;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
