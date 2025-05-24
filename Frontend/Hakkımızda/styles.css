@@ -1,0 +1,188 @@
+/* Genel Stiller */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 150vh;
+    display: flex;
+    flex-direction: column;
+}
+
+body, html {
+    overflow: auto;
+}
+
+/* Üst Bar ve Navbar */
+.top-bar {
+    background-color: #fff;
+    padding: 1rem 2rem;
+    padding-top: 10px;
+    margin-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    height: 60px;
+    background-color: #fff;
+}
+/* Kırmızı Şerit */
+.top-red-bar {
+    width: 100%;
+    height: 22px;
+    background: #b00203;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+}
+
+.flag-img {
+    height: 22px;
+    width: auto;
+    margin-right: 32px;
+}
+
+
+.logo-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.logo {
+    height: 150px;
+    width: 150px;
+    margin-top: 8px;
+}
+
+nav {
+    flex: 2;
+    display: flex;
+    gap: 10rem;
+    align-items: center;
+    justify-content: flex-end;
+    height: 50px;
+}
+
+nav a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.volunteer-btn {
+    background-color: #b00203;
+    color: #f7f7f7;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.volunteer-btn:hover {
+    background-color: #8a0102;
+    color: #ffffff;
+}
+
+
+/* Hakkımızda İçerik */
+.about-content {
+    flex: 1;
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.about-content h1 {
+    color: #E30A17;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    text-align: center;
+}
+
+.about-content p {
+    margin-bottom: 20px;
+    line-height: 1.8;
+    color: #444;
+    font-size: 1.1rem;
+    text-align: justify;
+}
+
+/* Footer */
+.footer {
+    background-color: #191940;
+    color: white;
+    padding: 40px 0 20px;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;
+}
+
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.footer-links {
+    display: flex;
+    gap: 30px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #E30A17;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.9rem;
+    color: #999;
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+    .about-content {
+        margin: 30px 20px;
+        padding: 20px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+} 
