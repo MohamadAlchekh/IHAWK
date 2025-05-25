@@ -7,6 +7,7 @@ const fileName = document.getElementById('fileName');
 const fileSize = document.getElementById('fileSize');
 const uploadDate = document.getElementById('uploadDate');
 const results = document.getElementById('results');
+const sectorCanvas = document.getElementById('sectorCanvas');
 
 // Drag & Drop events
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -36,7 +37,6 @@ function unhighlight(e) {
 
 dropZone.addEventListener('drop', handleDrop, false);
 fileInput.addEventListener('change', handleFileSelect, false);
-dropZone.addEventListener('click', () => fileInput.click());
 
 function handleDrop(e) {
     const dt = e.dataTransfer;
@@ -67,7 +67,7 @@ function handleFiles(files) {
             fileSize.textContent = formatFileSize(file.size);
             uploadDate.textContent = new Date().toLocaleString();
             imagePreview.style.display = 'block';
-            uploadToBackend(file); // Send to backend
+            uploadToBackend(file);
         }
         reader.readAsDataURL(file);
     }
@@ -93,167 +93,78 @@ function uploadToBackend(file) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Backend Response:', data);
+        console.log('Backend Response:', data); // Log JSON to console
         if (data.error) {
             results.textContent = `Hata: ${data.error}`;
+            sectorCanvas.style.display = 'none';
             return;
         }
 
-        // Translation mapping for labels
-        const translations = {
-            'Neighbourhood': 'Mahalle',
-            'Urban design': 'Kentsel tasarım',
-            'geological phenomenon': 'Jeolojik olay',
-            "Bird's-eye view": 'Kuşbakışı görünüm',
-            'Aerial photography': 'Hava fotoğrafçılığı',
-            'Suburb': 'Banliyö',
-            'Town square': 'Şehir meydanı',
-            'Earthquake': 'Deprem',
-            'Rubble': 'Enkaz'
-        };
-
-        // Create labels HTML with translations
-        const labelsHTML = data.results.labels.map(label => {
-            const turkishDescription = translations[label.description] || label.description;
-            return `<div class="label-box">
-                <strong>${turkishDescription}</strong>
-                <span class="label-score">${label.score}</span>
-            </div>`;
-        }).join('');
-
-        // Display results with detailed object information
+        // Display results
         results.innerHTML = `
             <img src="http://localhost:5000${data.image_url}" alt="Annotated Image" style="max-width:100%;border-radius:10px;margin-top:20px;">
-            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                <h3>Analiz Sonuçları:</h3>
-                <div class="buildings-box">
-                    <strong>Algılanan Binalar</strong>
-                    <span class="buildings-count">${data.results.buildings.length}</span>
-                </div>
-                <div style="margin-top: 15px;">
-                    <h4>Algılanan Veriler (${data.results.labels.length}):</h4>
-                    <div class="labels-container">
-                        ${labelsHTML}
-                    </div>
-                </div>
-                ${data.results.message ? `<p><strong>Mesaj:</strong> ${data.results.message}</p>` : ''}
-            </div>
-            <button class="save-analysis-btn" onclick="saveAnalysis(${JSON.stringify(data).replace(/"/g, '&quot;')})">Analizi Kaydet</button>
+            <p>${data.results.buildings.length} bina algılandı.</p>
+            ${data.results.message ? `<p>${data.results.message}</p>` : ''}
         `;
+        
+        // Draw sector grid on canvas
+        if (data.results.buildings.length > 0) {
+            sectorCanvas.style.display = 'block';
+            const ctx = sectorCanvas.getContext('2d');
+            const img = new Image();
+            img.src = `http://localhost:5000${data.image_url}`;
+            img.onload = function() {
+                sectorCanvas.width = img.width;
+                sectorCanvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                const width = img.width;
+                const height = img.height;
+                data.results.sectors.forEach(sector => {
+                    const x = (sector.sector_id % 2 === 1) ? 0 : width / 2;
+                    const y = (sector.sector_id <= 2) ? 0 : height / 2;
+                    ctx.fillStyle = sector.color === 'red' ? 'rgba(123, 255, 0, 0.3)' :
+                                   sector.color === 'yellow' ? 'rgba(255, 255, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)';
+                    ctx.fillRect(x, y, width / 2, height / 2);
+                    ctx.strokeStyle = '#000';
+                    ctx.strokeRect(x, y, width / 2, height / 2);
+                    ctx.fillStyle = '#000';
+                    ctx.font = '20px Arial';
+                    ctx.fillText(`Sektör ${sector.sector_id}: Öncelik ${sector.priority}`, x + 10, y + 30);
+                });
+            };
+        } else {
+            sectorCanvas.style.display = 'none';
+        }
     })
     .catch(error => {
         results.textContent = `Hata: ${error.message}`;
         console.error('Fetch Error:', error);
+        sectorCanvas.style.display = 'none';
     });
 }
 
-// Function to save analysis
-function saveAnalysis(data) {
-    try {
-        // Get existing analyses from localStorage
-        let savedAnalyses = JSON.parse(localStorage.getItem('savedAnalyses') || '[]');
-        
-        // Add new analysis with timestamp
-        const analysis = {
-            ...data,
-            savedAt: new Date().toISOString()
-        };
-        
-        savedAnalyses.unshift(analysis); // Add to beginning of array
-        
-        // Keep only last 10 analyses
-        if (savedAnalyses.length > 10) {
-            savedAnalyses = savedAnalyses.slice(0, 10);
-        }
-        
-        // Save back to localStorage
-        localStorage.setItem('savedAnalyses', JSON.stringify(savedAnalyses));
-        
-        // Update the saved analyses display
-        displaySavedAnalyses();
-        
-        // Show success message
-        alert('Analiz başarıyla kaydedildi!');
-    } catch (error) {
-        console.error('Error saving analysis:', error);
-        alert('Analiz kaydedilirken bir hata oluştu.');
-    }
+// Save and delete map
+function saveMap() {
+    const maps = JSON.parse(localStorage.getItem('sectorMaps') || '[]');
+    const newMap = {
+        id: Date.now(),
+        image: previewImage.src,
+        name: fileName.textContent,
+        size: fileSize.textContent,
+        uploadDate: uploadDate.textContent
+    };
+    maps.push(newMap);
+    localStorage.setItem('sectorMaps', JSON.stringify(maps));
+    alert('Harita başarıyla kaydedildi!');
+    loadSavedMaps();
+    resetUpload();
 }
 
-// Function to display saved analyses
-function displaySavedAnalyses() {
-    const savedAnalyses = JSON.parse(localStorage.getItem('savedAnalyses') || '[]');
-    const savedAnalysesSection = document.querySelector('.saved-analyses');
-    
-    if (!savedAnalysesSection) return;
-    
-    if (savedAnalyses.length === 0) {
-        savedAnalysesSection.innerHTML = '<p>Henüz kaydedilmiş analiz bulunmuyor.</p>';
-        return;
-    }
-    
-    const analysesHTML = savedAnalyses.map((analysis, index) => {
-        const date = new Date(analysis.savedAt).toLocaleString('tr-TR');
-        return `
-            <div class="saved-analysis-box">
-                <img src="http://localhost:5000${analysis.image_url}" alt="Analysis Image" style="width:100%;border-radius:10px;margin-bottom:15px;">
-                <div class="analysis-content">
-                    <div class="buildings-box">
-                        <strong>Algılanan Binalar</strong>
-                        <span class="buildings-count">${analysis.results.buildings.length}</span>
-                    </div>
-                    <div class="labels-count">
-                        <strong>Algılanan Veriler</strong>
-                        <span class="labels-count-number">${analysis.results.labels.length}</span>
-                    </div>
-                    <button class="view-details-btn" onclick="viewAnalysisDetails(${index})">Detayları Görüntüle</button>
-                </div>
-            </div>
-        `;
-    }).join('');
-    
-    savedAnalysesSection.innerHTML = `
-        <h3>Kaydedilen Analizler</h3>
-        <div class="saved-analyses-container">
-            ${analysesHTML}
-        </div>
-    `;
-}
-
-// Function to view analysis details
-function viewAnalysisDetails(index) {
-    const savedAnalyses = JSON.parse(localStorage.getItem('savedAnalyses') || '[]');
-    const analysis = savedAnalyses[index];
-    
-    if (!analysis) return;
-    
-    const detailsHTML = `
-        <div class="analysis-details">
-            <div class="labels-list">
-                ${analysis.results.labels.map(label => `
-                    <div class="label-item">
-                        <strong>${label.description}</strong>: ${label.score}
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-    
-    const analysisBox = document.querySelector(`.saved-analysis-box:nth-child(${index + 1})`);
-    if (analysisBox) {
-        const existingDetails = analysisBox.querySelector('.analysis-details');
-        if (existingDetails) {
-            existingDetails.remove();
-        } else {
-            analysisBox.insertAdjacentHTML('beforeend', detailsHTML);
-        }
+function deleteMap() {
+    if (confirm('Haritayı silmek istediğinizden emin misiniz?')) {
+        resetUpload();
     }
 }
-
-// Initialize saved analyses display when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    displaySavedAnalyses();
-});
 
 function resetUpload() {
     previewImage.src = '';
@@ -263,9 +174,30 @@ function resetUpload() {
     imagePreview.style.display = 'none';
     fileInput.value = '';
     results.innerHTML = 'Henüz sonuç yok.';
+    sectorCanvas.style.display = 'none';
 }
 
-// Remove all other functions and event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize any remaining functionality
-});
+function loadSavedMaps() {
+    const mapsGrid = document.getElementById('savedMapsGrid');
+    const maps = JSON.parse(localStorage.getItem('sectorMaps') || '[]');
+    mapsGrid.innerHTML = '';
+    if (maps.length === 0) {
+        mapsGrid.innerHTML = '<div style="text-align:center;grid-column:1/-1;padding:20px;">Henüz kaydedilmiş harita bulunmamaktadır.</div>';
+        return;
+    }
+    maps.forEach(map => {
+        const card = document.createElement('div');
+        card.className = 'map-card';
+        card.innerHTML = `
+            <img src="${map.image}" alt="${map.name}">
+            <div class="map-info">
+                <h3>${map.name}</h3>
+                <p class="map-date">Yüklenme: ${map.uploadDate}</p>
+                <p>Boyut: ${map.size}</p>
+            </div>
+        `;
+        mapsGrid.appendChild(card);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', loadSavedMaps);
