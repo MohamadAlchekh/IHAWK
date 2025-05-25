@@ -123,6 +123,33 @@
             border: 1px solid var(--border-color);
         }
 
+        .edevlet-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0px;
+            background: #E30A17;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            width: 250px;
+            margin: 0 auto 30px auto;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .edevlet-btn:hover {
+            background: #c00913;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(227, 10, 23, 0.3);
+        }
+
         h1 {
             text-align: center;
             color: var(--primary-color);
@@ -567,6 +594,9 @@
     </div>
 
     <div class="container">
+        <a href="https://www.turkiye.gov.tr" target="_blank" class="edevlet-btn">
+            e-Devlet ile Giriş Yap
+        </a>
         <h1>IHAWK - Ekip Kayıt Formu</h1>
         
         <form action="#" method="POST" onsubmit="return handleFormSubmit(event)">
