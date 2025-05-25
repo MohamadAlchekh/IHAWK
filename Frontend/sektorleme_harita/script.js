@@ -115,8 +115,9 @@ function uploadToBackend(file) {
         // Create labels HTML with translations
         const labelsHTML = data.results.labels.map(label => {
             const turkishDescription = translations[label.description] || label.description;
-            return `<div style="margin: 5px 0; padding: 8px; background: white; border-radius: 4px;">
-                <strong>${turkishDescription}</strong>: ${label.score}
+            return `<div class="label-box">
+                <strong>${turkishDescription}</strong>
+                <span class="label-score">${label.score}</span>
             </div>`;
         }).join('');
 
@@ -125,10 +126,13 @@ function uploadToBackend(file) {
             <img src="http://localhost:5000${data.image_url}" alt="Annotated Image" style="max-width:100%;border-radius:10px;margin-top:20px;">
             <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
                 <h3>Analiz Sonuçları:</h3>
-                <p><strong>Algılanan Binalar:</strong> ${data.results.buildings.length}</p>
+                <div class="buildings-box">
+                    <strong>Algılanan Binalar</strong>
+                    <span class="buildings-count">${data.results.buildings.length}</span>
+                </div>
                 <div style="margin-top: 15px;">
                     <h4>Algılanan Veriler (${data.results.labels.length}):</h4>
-                    <div style="max-height: 300px; overflow-y: auto;">
+                    <div class="labels-container">
                         ${labelsHTML}
                     </div>
                 </div>

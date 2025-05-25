@@ -252,6 +252,80 @@ nav {
     font-weight: 600;
 }
 
+.labels-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.label-box {
+    background: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.label-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.label-box strong {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    font-size: 0.95em;
+}
+
+.label-score {
+    color: #28a745;
+    font-size: 1.1em;
+    font-weight: 600;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 4px 12px;
+    border-radius: 15px;
+    margin-top: 5px;
+}
+
+.buildings-box {
+    background: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+.buildings-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.buildings-box strong {
+    color: var(--primary-color);
+    margin-bottom: 8px;
+    font-size: 1em;
+}
+
+.buildings-count {
+    color: #28a745;
+    font-size: 1.3em;
+    font-weight: 600;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 6px 16px;
+    border-radius: 15px;
+}
+
 .saved-maps {
     margin-top: 40px;
 }
