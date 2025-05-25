@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sektörleme Haritası Yükle ve Analiz Et</title>
+    <title>Kendi Modelimiz ile Görsel Analiz</title>
     <link rel="stylesheet" href="../Anasayfa/styles.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -22,7 +22,7 @@
             <a href="../Anasayfa/index.html">ANASAYFA</a>
             <a href="../Hakkımızda/about.html">HAKKIMIZDA</a>
             <a href="../sektorleme_harita/index.html">SEKTÖRLEME HARİTASI</a>
-            <a href="../modelimiz/index.html">MODELİMİZ</a>
+            <a href="../modelimiz/index.html" style="color: var(--primary-color); font-weight: bold; border-bottom: 2px solid var(--primary-color);">MODELİMİZ</a>
             <a href="../ekipler/index.html">EKİPLER</a>
             <a href="../giris_bilgileri/index.html"><button class="volunteer-btn">KAYIT OL</button></a>
         </nav>
@@ -30,39 +30,39 @@
 
     <div class="container">
         <div class="header">
-            <h1>Sektörleme Haritası Yükle ve Analiz Et</h1>
+            <h1>Kendi Modelimiz ile Görsel Analiz</h1>
             <a href="../ekipler/index.html" style="text-decoration: none; padding: 10px 20px; border-radius: 6px; background: var(--primary-color); color: white;">Ekipler Sayfasına Dön</a>
         </div>
         <div class="content" style="margin-bottom:30px;">
-            <p>Bu sayfada deprem sonrası sektörleme haritası yükleyebilir ve otomatik analiz sonuçlarını görebilirsiniz.</p>
+            <p>Bu sayfada kendi geliştirdiğimiz yapay zeka modelini test edebilir, örnek görsel yükleyerek modelin analiz sonuçlarını görebilirsiniz.</p>
         </div>
         <div class="upload-section">
             <div class="upload-area" id="dropZone">
                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                <div class="upload-text">Sektörleme Haritası Yüklemek için Tıklayın veya Sürükleyin</div>
+                <div class="upload-text">Model Analizi için Görsel Yükleyin veya Sürükleyin</div>
                 <div class="upload-hint">PNG, JPG veya JPEG formatında, maksimum 10MB</div>
                 <input type="file" id="fileInput" accept="image/*">
             </div>
-            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Harita Seç</button>
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">Görsel Seç</button>
             <div class="image-preview" id="imagePreview">
-                <img id="previewImage" src="" alt="Harita Önizleme">
+                <img id="previewImage" src="" alt="Model Önizleme">
                 <div class="image-info">
                     <p>Dosya Adı: <span id="fileName"></span></p>
                     <p>Boyut: <span id="fileSize"></span></p>
                     <p>Yüklenme Tarihi: <span id="uploadDate"></span></p>
                 </div>
                 <div class="image-actions">
-                    <button class="action-btn save-btn" onclick="saveMap()">Haritayı Kaydet</button>
-                    <button class="action-btn delete-btn" onclick="deleteMap()">Haritayı Sil</button>
+                    <button class="action-btn save-btn" onclick="saveMap()">Analiz Sonucunu Kaydet</button>
+                    <button class="action-btn delete-btn" onclick="deleteMap()">Görseli Sil</button>
                 </div>
             </div>
         </div>
         <div class="results-section">
-            <h2>Harita Analiz Sonuçları</h2>
+            <h2>Model Analiz Sonuçları</h2>
             <p id="results">Henüz analiz yapılmadı.</p>
         </div>
         <div class="saved-maps">
-            <h2>Kaydedilen Haritalar</h2>
+            <h2>Kaydedilen Analizler</h2>
             <div class="maps-grid" id="savedMapsGrid"></div>
         </div>
     </div>

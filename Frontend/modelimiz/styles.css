@@ -55,19 +55,6 @@ body {
     padding: 20px;
 }
 
-nav {
-    flex: 2;
-    display: flex;
-    gap: 7rem;
-    align-items: center;
-    justify-content: flex-end;
-    height: 50px;
-}
-
-.logo {
-    height: 50px;
-}
-
 .header {
     background: white;
     padding: 20px;
