@@ -129,22 +129,6 @@ function uploadToBackend(file) {
     });
 }
 
-// Save and delete map
-function saveMap() {
-    const maps = JSON.parse(localStorage.getItem('sectorMaps') || '[]');
-    const newMap = {
-        id: Date.now(),
-        image: previewImage.src,
-        name: fileName.textContent,
-        size: fileSize.textContent,
-        uploadDate: uploadDate.textContent
-    };
-    maps.push(newMap);
-    localStorage.setItem('sectorMaps', JSON.stringify(maps));
-    alert('Harita başarıyla kaydedildi!');
-    loadSavedMaps();
-    resetUpload();
-}
 
 function deleteMap() {
     if (confirm('Haritayı silmek istediğinizden emin misiniz?')) {
@@ -161,28 +145,3 @@ function resetUpload() {
     fileInput.value = '';
     results.innerHTML = 'Henüz sonuç yok.';
 }
-
-function loadSavedMaps() {
-    const mapsGrid = document.getElementById('savedMapsGrid');
-    const maps = JSON.parse(localStorage.getItem('sectorMaps') || '[]');
-    mapsGrid.innerHTML = '';
-    if (maps.length === 0) {
-        mapsGrid.innerHTML = '<div style="text-align:center;grid-column:1/-1;padding:20px;">Henüz kaydedilmiş harita bulunmamaktadır.</div>';
-        return;
-    }
-    maps.forEach(map => {
-        const card = document.createElement('div');
-        card.className = 'map-card';
-        card.innerHTML = `
-            <img src="${map.image}" alt="${map.name}">
-            <div class="map-info">
-                <h3>${map.name}</h3>
-                <p class="map-date">Yüklenme: ${map.uploadDate}</p>
-                <p>Boyut: ${map.size}</p>
-            </div>
-        `;
-        mapsGrid.appendChild(card);
-    });
-}
-
-document.addEventListener('DOMContentLoaded', loadSavedMaps);
