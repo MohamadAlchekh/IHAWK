@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IHAWK - Ekip Kayıt Formu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --primary-color: #01007f;
@@ -126,9 +127,9 @@
         .edevlet-btn {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 0px;
-            background: #E30A17;
+            justify-content: flex-start;
+            gap: 10px;
+            background: #d0011b;
             color: white;
             padding: 12px 20px;
             border: none;
@@ -136,7 +137,7 @@
             cursor: pointer;
             font-size: 1em;
             font-weight: 500;
-            width: 250px;
+            width: 280px;
             margin: 0 auto 30px auto;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -144,10 +145,15 @@
             text-decoration: none;
         }
 
+        .edevlet-btn img {
+            height: 33px;
+            width: auto;
+            margin-left: 0px;
+        }
+
         .edevlet-btn:hover {
-            background: #c00913;
+            background: #b00117;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(227, 10, 23, 0.3);
         }
 
         h1 {
@@ -595,6 +601,7 @@
 
     <div class="container">
         <a href="https://www.turkiye.gov.tr" target="_blank" class="edevlet-btn">
+            <img src="../Anasayfa/img/e_devlet.png" alt="e-Devlet Logo">
             e-Devlet ile Giriş Yap
         </a>
         <h1>IHAWK - Ekip Kayıt Formu</h1>
