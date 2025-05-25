@@ -82,7 +82,7 @@ nav {
 
 .header h1 {
     color: var(--primary-color);
-    font-size: 2.2em;
+    font-size: 2rem;
     margin: 0;
     font-weight: 700;
     text-align: center;
@@ -480,6 +480,39 @@ nav {
 .map-date {
     color: #666;
     font-size: 0.9em;
+}
+
+.image-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.action-btn {
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(1, 0, 127, 0.2);
+}
+
+.action-btn.delete-btn {
+    background: linear-gradient(45deg, #e2201a, #ff2a23);
+}
+
+.action-btn.delete-btn:hover {
+    background: linear-gradient(45deg, #ff2a23, #e2201a);
+    box-shadow: 0 3px 10px rgba(226, 32, 26, 0.2);
 }
 
 @media (max-width: 768px) {
