@@ -1,11 +1,12 @@
 :root {
     --primary-color: #010080;
     --primary-light: #010080;
-    --text-color: #000000;
+    --text-color: #2c3e50;
     --bg-color: #f8f9fa;
-    --border-color: #dee2e6;
+    --border-color: #e9ecef;
     --success-color: #28a745;
-    --shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     --button-color: #191940;
     --button-hover: #25255d;
     --header-text-color: #181818;
@@ -26,7 +27,7 @@ body {
     padding: 20px;
     color: var(--text-color);
     margin: 0;
-    padding-top: 82px; /* Changed from margin-top to padding-top */
+    padding-top: 82px;
 }
 
 /* Top bar positioning */
@@ -57,9 +58,9 @@ body {
 
 .header {
     background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
     margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
@@ -68,31 +69,34 @@ body {
 
 .header h1 {
     color: var(--primary-color);
-    font-size: 2em;
+    font-size: 2.2em;
     margin: 0;
+    font-weight: 700;
 }
 
 .upload-section {
     background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
     margin-bottom: 30px;
 }
 
 .upload-area {
     border: 2px dashed var(--border-color);
-    border-radius: 10px;
-    padding: 40px;
+    border-radius: 15px;
+    padding: 50px 40px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: 20px;
+    background: #fafafa;
 }
 
 .upload-area:hover {
     border-color: var(--primary-color);
     background: rgba(1, 0, 127, 0.02);
+    transform: translateY(-2px);
 }
 
 .upload-area.dragover {
@@ -103,12 +107,14 @@ body {
 .upload-icon {
     font-size: 48px;
     color: var(--primary-color);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .upload-text {
     color: var(--text-color);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    font-weight: 500;
 }
 
 .upload-hint {
@@ -123,13 +129,18 @@ body {
 .upload-btn {
     background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
     color: white;
-    padding: 12px 25px;
+    padding: 15px 30px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.1em;
     font-weight: 600;
     transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .upload-btn:hover {
@@ -144,46 +155,88 @@ body {
 
 .image-preview img {
     max-width: 100%;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
 }
 
 .image-info {
-    margin-top: 15px;
-    padding: 15px;
+    margin-top: 20px;
+    padding: 20px;
     background: #f8f9fa;
-    border-radius: 8px;
-    font-size: 0.9em;
+    border-radius: 15px;
+    font-size: 0.95em;
+    display: grid;
+    gap: 15px;
 }
 
-.image-actions {
-    margin-top: 20px;
+.image-info p {
     display: flex;
+    align-items: center;
     gap: 10px;
 }
 
-.action-btn {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
+.image-info strong {
+    color: var(--primary-color);
+    min-width: 120px;
+}
+
+.results-section {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+}
+
+.results-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    font-weight: 700;
+}
+
+#results {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 15px;
+    min-height: 100px;
+}
+
+#results img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+}
+
+#results h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.4em;
+}
+
+#results h4 {
+    color: var(--primary-color);
+    margin: 20px 0 15px;
+    font-size: 1.2em;
+}
+
+#results div[style*="margin: 5px 0"] {
+    background: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin: 8px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
 }
 
-.save-btn {
-    background: var(--success-color);
-    color: white;
-}
-
-.delete-btn {
-    background: var(--secondary-color);
-    color: white;
-}
-
-.action-btn:hover {
+#results div[style*="margin: 5px 0"]:hover {
     transform: translateY(-2px);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#results strong {
+    color: var(--text-color);
+    font-weight: 600;
 }
 
 .saved-maps {
@@ -238,7 +291,26 @@ body {
         padding: 10px;
     }
 
+    .header {
+        padding: 20px;
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .header h1 {
+        font-size: 1.8em;
+    }
+
+    .upload-section {
+        padding: 20px;
+    }
+
     .upload-area {
+        padding: 30px 20px;
+    }
+
+    .results-section {
         padding: 20px;
     }
 

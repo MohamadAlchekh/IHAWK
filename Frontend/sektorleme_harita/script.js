@@ -98,27 +98,39 @@ function uploadToBackend(file) {
             return;
         }
 
-        // Create labels HTML
-        const labelsHTML = data.results.labels.map(label => 
-            `<div style="margin: 5px 0; padding: 8px; background: white; border-radius: 4px;">
-                <strong>${label.description}</strong>: ${label.score}
-            </div>`
-        ).join('');
+        // Translation mapping for labels
+        const translations = {
+            'Neighbourhood': 'Mahalle',
+            'Urban design': 'Kentsel tasarım',
+            'geological phenomenon': 'Jeolojik olay',
+            "Bird's-eye view": 'Kuşbakışı görünüm',
+            'Aerial photography': 'Hava fotoğrafçılığı',
+            'Suburb': 'Banliyö',
+            'Town square': 'Şehir meydanı',
+            'Earthquake': 'Deprem',
+            'Rubble': 'Enkaz'
+        };
+
+        // Create labels HTML with translations
+        const labelsHTML = data.results.labels.map(label => {
+            const turkishDescription = translations[label.description] || label.description;
+            return `<div style="margin: 5px 0; padding: 8px; background: white; border-radius: 4px;">
+                <strong>${turkishDescription}</strong>: ${label.score}
+            </div>`;
+        }).join('');
 
         // Display results with detailed object information
         results.innerHTML = `
             <img src="http://localhost:5000${data.image_url}" alt="Annotated Image" style="max-width:100%;border-radius:10px;margin-top:20px;">
             <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
                 <h3>Analiz Sonuçları:</h3>
-                <p><strong>Görsel URL:</strong> ${data.image_url}</p>
                 <p><strong>Algılanan Binalar:</strong> ${data.results.buildings.length}</p>
                 <div style="margin-top: 15px;">
-                    <h4>Etiketler (${data.results.labels.length}):</h4>
+                    <h4>Algılanan Veriler (${data.results.labels.length}):</h4>
                     <div style="max-height: 300px; overflow-y: auto;">
                         ${labelsHTML}
                     </div>
                 </div>
-                <p><strong>Sektörler:</strong> ${data.results.sectors.length}</p>
                 ${data.results.message ? `<p><strong>Mesaj:</strong> ${data.results.message}</p>` : ''}
             </div>
         `;
@@ -127,13 +139,6 @@ function uploadToBackend(file) {
         results.textContent = `Hata: ${error.message}`;
         console.error('Fetch Error:', error); // Log errors
     });
-}
-
-
-function deleteMap() {
-    if (confirm('Haritayı silmek istediğinizden emin misiniz?')) {
-        resetUpload();
-    }
 }
 
 function resetUpload() {
@@ -145,3 +150,8 @@ function resetUpload() {
     fileInput.value = '';
     results.innerHTML = 'Henüz sonuç yok.';
 }
+
+// Remove all other functions and event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize any remaining functionality
+});
