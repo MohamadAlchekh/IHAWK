@@ -92,6 +92,7 @@ function uploadToBackend(file) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log('Backend Response:', data); // Log JSON to console
         if (data.error) {
             results.textContent = `Hata: ${data.error}`;
             return;
@@ -106,6 +107,7 @@ function uploadToBackend(file) {
     })
     .catch(error => {
         results.textContent = `Hata: ${error.message}`;
+        console.error('Fetch Error:', error); // Log errors
     });
 }
 
