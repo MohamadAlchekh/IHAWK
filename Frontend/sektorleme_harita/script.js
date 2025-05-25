@@ -93,7 +93,7 @@ function uploadToBackend(file) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Backend Response:', data); // Log JSON to console
+        console.log('Backend Response:', data);
         if (data.error) {
             results.textContent = `Hata: ${data.error}`;
             return;
@@ -138,13 +138,122 @@ function uploadToBackend(file) {
                 </div>
                 ${data.results.message ? `<p><strong>Mesaj:</strong> ${data.results.message}</p>` : ''}
             </div>
+            <button class="save-analysis-btn" onclick="saveAnalysis(${JSON.stringify(data).replace(/"/g, '&quot;')})">Analizi Kaydet</button>
         `;
     })
     .catch(error => {
         results.textContent = `Hata: ${error.message}`;
-        console.error('Fetch Error:', error); // Log errors
+        console.error('Fetch Error:', error);
     });
 }
+
+// Function to save analysis
+function saveAnalysis(data) {
+    try {
+        // Get existing analyses from localStorage
+        let savedAnalyses = JSON.parse(localStorage.getItem('savedAnalyses') || '[]');
+        
+        // Add new analysis with timestamp
+        const analysis = {
+            ...data,
+            savedAt: new Date().toISOString()
+        };
+        
+        savedAnalyses.unshift(analysis); // Add to beginning of array
+        
+        // Keep only last 10 analyses
+        if (savedAnalyses.length > 10) {
+            savedAnalyses = savedAnalyses.slice(0, 10);
+        }
+        
+        // Save back to localStorage
+        localStorage.setItem('savedAnalyses', JSON.stringify(savedAnalyses));
+        
+        // Update the saved analyses display
+        displaySavedAnalyses();
+        
+        // Show success message
+        alert('Analiz başarıyla kaydedildi!');
+    } catch (error) {
+        console.error('Error saving analysis:', error);
+        alert('Analiz kaydedilirken bir hata oluştu.');
+    }
+}
+
+// Function to display saved analyses
+function displaySavedAnalyses() {
+    const savedAnalyses = JSON.parse(localStorage.getItem('savedAnalyses') || '[]');
+    const savedAnalysesSection = document.querySelector('.saved-analyses');
+    
+    if (!savedAnalysesSection) return;
+    
+    if (savedAnalyses.length === 0) {
+        savedAnalysesSection.innerHTML = '<p>Henüz kaydedilmiş analiz bulunmuyor.</p>';
+        return;
+    }
+    
+    const analysesHTML = savedAnalyses.map((analysis, index) => {
+        const date = new Date(analysis.savedAt).toLocaleString('tr-TR');
+        return `
+            <div class="saved-analysis-box">
+                <img src="http://localhost:5000${analysis.image_url}" alt="Analysis Image" style="width:100%;border-radius:10px;margin-bottom:15px;">
+                <div class="analysis-content">
+                    <div class="buildings-box">
+                        <strong>Algılanan Binalar</strong>
+                        <span class="buildings-count">${analysis.results.buildings.length}</span>
+                    </div>
+                    <div class="labels-count">
+                        <strong>Algılanan Veriler</strong>
+                        <span class="labels-count-number">${analysis.results.labels.length}</span>
+                    </div>
+                    <button class="view-details-btn" onclick="viewAnalysisDetails(${index})">Detayları Görüntüle</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    savedAnalysesSection.innerHTML = `
+        <h3>Kaydedilen Analizler</h3>
+        <div class="saved-analyses-container">
+            ${analysesHTML}
+        </div>
+    `;
+}
+
+// Function to view analysis details
+function viewAnalysisDetails(index) {
+    const savedAnalyses = JSON.parse(localStorage.getItem('savedAnalyses') || '[]');
+    const analysis = savedAnalyses[index];
+    
+    if (!analysis) return;
+    
+    const detailsHTML = `
+        <div class="analysis-details">
+            <div class="labels-list">
+                ${analysis.results.labels.map(label => `
+                    <div class="label-item">
+                        <strong>${label.description}</strong>: ${label.score}
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    
+    const analysisBox = document.querySelector(`.saved-analysis-box:nth-child(${index + 1})`);
+    if (analysisBox) {
+        const existingDetails = analysisBox.querySelector('.analysis-details');
+        if (existingDetails) {
+            existingDetails.remove();
+        } else {
+            analysisBox.insertAdjacentHTML('beforeend', detailsHTML);
+        }
+    }
+}
+
+// Initialize saved analyses display when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    displaySavedAnalyses();
+});
 
 function resetUpload() {
     previewImage.src = '';
